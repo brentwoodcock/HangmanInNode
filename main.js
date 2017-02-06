@@ -23,10 +23,17 @@ game = {
 		if ((this.currentWord.guessed != true) && (this.numGuesses != 0)) {
 			inquirer.prompt({
 				name: 'userGuess',
-				message: 'Guess a letter: '
+				message: 'Guess a letter: ',
+				validate: function(value) {
+					if ((/[a-z]/.test(value.toLowerCase()) && (value.length == 1))){
+						return true;
+					} else {
+						return false;
+					}
+				}
 			}).then(function(answer) {
 				// Check user's guess
-				if (self.currentWord.checkGuess(answer.userGuess)){
+				if (self.currentWord.checkGuess(answer.userGuess.toLowerCase())){
 					console.log(self.currentWord.renderWord());
 				} else {
 					self.numGuesses--;
