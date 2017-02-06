@@ -12,7 +12,6 @@ game = {
 	startGame: function() {
 		this.currentWord = new Word(this.wordBank.pickWord());
 		this.currentWord.createCharacters();
-		console.log(this.currentWord);
 		this.playGame();
 	},
 
