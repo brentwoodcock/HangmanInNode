@@ -1,19 +1,18 @@
 var inquirer = require('inquirer');
 
 var Word = require('./word.js');
-
-// var currentWord = new Word('apple stick');
-// console.log(currentWord);
-// currentWord.createCharacters();
-// console.log(currentWord);
+var WordBank = require('./game.js');
 
 game = {
+	wordBank: new WordBank(),
 	currentWord: null,
-	numGuesses: 12,
+	numGuesses: 10,
+	previousGuesses: [],
 
 	startGame: function() {
-		this.currentWord = new Word('apple stick');
+		this.currentWord = new Word(this.wordBank.pickWord());
 		this.currentWord.createCharacters();
+		console.log(this.currentWord);
 		this.playGame();
 	},
 
@@ -21,11 +20,13 @@ game = {
 		var self = this;
 
 		if ((this.currentWord.guessed != true) && (this.numGuesses != 0)) {
+			console.log(self.currentWord.renderWord());
 			inquirer.prompt({
 				name: 'userGuess',
 				message: 'Guess a letter: ',
 				validate: function(value) {
-					if ((/[a-z]/.test(value.toLowerCase()) && (value.length == 1))){
+					value = value.toLowerCase();
+					if ((/[a-z]/.test(value)) && (value.length == 1) && (self.previousGuesses.indexOf(value) == -1)){
 						return true;
 					} else {
 						return false;
@@ -33,17 +34,31 @@ game = {
 				}
 			}).then(function(answer) {
 				// Check user's guess
-				if (self.currentWord.checkGuess(answer.userGuess.toLowerCase())){
-					console.log(self.currentWord.renderWord());
-				} else {
+				if (!self.currentWord.checkGuess(answer.userGuess.toLowerCase())){
+					console.log('Your guess was incorrect.');
 					self.numGuesses--;
-					console.log('Number of guesses remaining: ' + self.numGuesses);
+					self.previousGuesses.push(answer.userGuess.toLowerCase());
+				} else {
+					console.log('Your guess was correct!');
 				}
 				// Check if user has correctly guessed entire word
 				self.currentWord.checkIfWin();
 				if (self.currentWord.guessed) {
-					console.log('Congratulations! You win!');
+					console.log('Congratulations! You won!');
 					return;
+				}
+				// Check if user has lost
+				if (self.numGuesses == 0) {
+					console.log('Sorry but you have been defeated.');
+					return;
+				}
+				// Log the number of guesses remaining and user's previous guesses
+				console.log('Number of guesses remaining: ' + self.numGuesses);
+				if (self.numGuesses == 9) {
+					console.log('Your previous guess: ' + self.previousGuesses);
+				}
+				if (self.numGuesses < 9) {
+					console.log('Your previous guesses: ' + self.previousGuesses);
 				}
 				game.playGame();
 			})
