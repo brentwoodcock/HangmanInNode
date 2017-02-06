@@ -15,15 +15,26 @@ var Word = function(word) {
 			}
 		}
 	};
-
+	
 	// Check a user's guess, setting the letter's appear property to true if a letter is correctly guessed
+	// Returns true for a correct guess, false for an incorrect guess
 	this.checkGuess = function(userGuess) {
+		var correctGuess = false;
 		for (var i = 0; i < this.characters.length; i++) {
 			if (this.characters[i].letter == userGuess){
 				this.characters[i].appear = true;
+				correctGuess = true;
 			}
 		}
+		return correctGuess;
 	};
+
+	// Check if user has successfully guessed every letter
+	this.checkIfWin = function () {
+		this.guessed = this.characters.every(function(x) {
+			return x.appear;
+		});
+	}
 
 	// Create a string to represent the current state of user's guess
 	this.renderWord = function() {

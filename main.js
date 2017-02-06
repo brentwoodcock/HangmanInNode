@@ -1,6 +1,5 @@
 var inquirer = require('inquirer');
 
-var Game = require('./game.js');
 var Word = require('./word.js');
 
 // var currentWord = new Word('apple stick');
@@ -19,14 +18,26 @@ game = {
 	},
 
 	playGame: function() {
-		console.log(this.currentWord);
+		var self = this;
+
 		if ((this.currentWord.guessed != true) && (this.numGuesses != 0)) {
 			inquirer.prompt({
 				name: 'userGuess',
 				message: 'Guess a letter: '
 			}).then(function(answer) {
-				this.currentWord.checkGuess(answer.userGuess);
-				console.log(this.currentWord.renderWord());
+				// Check user's guess
+				if (self.currentWord.checkGuess(answer.userGuess)){
+					console.log(self.currentWord.renderWord());
+				} else {
+					self.numGuesses--;
+					console.log('Number of guesses remaining: ' + self.numGuesses);
+				}
+				// Check if user has correctly guessed entire word
+				self.currentWord.checkIfWin();
+				if (self.currentWord.guessed) {
+					console.log('Congratulations! You win!');
+					return;
+				}
 				game.playGame();
 			})
 		}
