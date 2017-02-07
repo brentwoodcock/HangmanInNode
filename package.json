@@ -1,0 +1,24 @@
+{
+  "name": "hangman",
+  "version": "1.0.0",
+  "description": "This program will allow the user to play hangman in the console.",
+  "main": "main.js",
+  "dependencies": {
+    "inquirer": "^3.0.1",
+    "prompt": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brentwoodcock/HangmanInNode.git"
+  },
+  "author": "Brent Woodcock",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brentwoodcock/HangmanInNode/issues"
+  },
+  "homepage": "https://github.com/brentwoodcock/HangmanInNode#readme"
+}
